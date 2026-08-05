@@ -69,9 +69,7 @@ O jogo é dividido em **5 fases**, cada uma trabalhando uma habilidade diferente
 
 ### Fase 5 — Quiz Final e Certificado
 
-**O que é:** um quiz de múltipla escolha com perguntas sobre phishing, engenharia social e boas práticas de segurança digital. Ao final, o jogador recebe uma pontuação total (somando todas as fases) e um certificado de conclusão personalizado com o nome digitado.
-
-**Por que é útil:** consolida todo o conteúdo aprendido nas fases anteriores de forma objetiva, e o certificado funciona como um incentivo simbólico de conclusão — reforçando a sensação de aprendizado completo.
+**O que é:** um quiz de múltipla escolha com perguntas sobre phishing, engenharia social e boas práticas de segurança digital. Ao final, o jogador recebe uma pontuação total (somando todas as fases) e um certificado de conclusão.
 
 > *[Espaço para print do quiz]*
 > *[Espaço para print do certificado final]*
