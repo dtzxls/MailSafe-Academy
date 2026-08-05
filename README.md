@@ -24,7 +24,7 @@ O jogo é dividido em **5 fases**, cada uma trabalhando uma habilidade diferente
 
 ### Fase 1 — Caixa de Entrada
 
-**O que é:** uma simulação de caixa de e-mail real, no estilo Gmail/Outlook, com 20 e-mails no total — sendo 19 legítimos e apenas 1 de phishing. O jogador precisa abrir cada e-mail, analisar remetente, assunto e conteúdo, e decidir se é "Seguro" ou "Phishing".
+**O que é:** uma simulação de caixa de e-mail real, no estilo Gmail/Outlook, com 10 e-mails no total — sendo 7 legítimos e 3 de phishing. O jogador precisa abrir cada e-mail, analisar remetente, assunto e conteúdo, e decidir se é "Seguro" ou "Phishing".
 
 **Por que é útil:** essa é a situação mais comum do dia a dia. A fase treina o olhar para os detalhes que costumam passar despercebidos, como domínios de e-mail levemente alterados, tom de urgência exagerado e pedidos de dados sensíveis.
 
