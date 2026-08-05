@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MailSafe Academy — Jogo Educacional sobre Phishing</title>
+  <meta name="description" content="Aprenda a identificar e-mails de phishing, links falsos e páginas clonadas de forma interativa e gamificada." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ===================== CABEÇALHO FIXO ===================== -->
+<header id="header" role="banner">
+  <div class="logo">
+    <span>MailSafe <em>Academy</em></span>
+  </div>
+  <div id="header-right">
+    <div id="phase-indicator" role="status" aria-live="polite">Início</div>
+    <div id="score-display" role="status" aria-live="polite">
+      <span id="score-value">0</span> pts
+    </div>
+  </div>
+</header>
+
+<main id="app" role="main">
+
+  <!-- ==================== TELA INICIAL ==================== -->
+  <section id="screen-start" class="screen active" aria-label="Tela inicial">
+    <video class="start-bg-video" autoplay muted loop playsinline preload="auto">
+      <source src="video da carta.mp4" type="video/mp4" />
+    </video>
+    <div class="start-overlay"></div>
+    <div class="start-container">
+      <div class="start-main">
+        
+        <h1 class="titu">Aprenda a Detectar<br>Phishing de Verdade</h1>
+        <p class="subtitle">5 fases interativas para você aprender a identificar e-mails fraudulentos, links maliciosos e páginas falsas antes que seja tarde demais.</p>
+
+        <button class="btn btn-primary btn-lg" id="btn-start" onclick="startGame()">Começar Treinamento</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== TELA DE TRANSIÇÃO ==================== -->
+  <section id="screen-transition" class="screen" aria-label="Transição entre fases">
+    <div class="transition-badge" id="trans-phase-num">Fase 1 Concluída!</div>
+    <div class="transition-check" role="img" aria-label="Fase concluída">✓</div>
+    <h2 class="transition-title" id="trans-title">Fase 1 Concluída!</h2>
+    <p style="color:var(--text-muted);margin-bottom:16px;" id="trans-subtitle">Você avançou para a próxima fase.</p>
+    <div class="transition-score-box">
+      <span class="score-label">Pontuação acumulada</span>
+      <span class="score-value" id="trans-score">0</span>
+      <span class="score-label" id="trans-phase-gain"></span>
+    </div>
+    <div class="progress-track" role="progressbar" aria-label="Progresso no jogo">
+      <div class="progress-dot" id="pd1"></div>
+      <div style="width:24px;height:2px;background:var(--border);border-radius:1px;"></div>
+      <div class="progress-dot" id="pd2"></div>
+      <div style="width:24px;height:2px;background:var(--border);border-radius:1px;"></div>
+      <div class="progress-dot" id="pd3"></div>
+      <div style="width:24px;height:2px;background:var(--border);border-radius:1px;"></div>
+      <div class="progress-dot" id="pd4"></div>
+      <div style="width:24px;height:2px;background:var(--border);border-radius:1px;"></div>
+      <div class="progress-dot" id="pd5"></div>
+    </div>
+    <p class="transition-next-info" id="trans-next-info">Prepare-se para a próxima fase!</p>
+    <button class="btn btn-primary btn-lg" id="btn-next-phase" onclick="goToNextPhase()">Próxima Fase →</button>
+  </section>
+
+  <!-- ==================== FASE 1: CAIXA DE ENTRADA ==================== -->
+  <section id="screen-phase1" class="screen" aria-label="Fase 1: Caixa de entrada">
+    <div id="phase1-result" class="hidden">
+      <div class="results-screen">
+
+        <div class="results-watermark" aria-hidden="true">RESULTADOS</div>
+
+        <nav class="results-nav" aria-label="Navegação">
+          <button class="nav-close" type="button" onclick="backToResultsInbox()" aria-label="Voltar">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+          </button>
+          <span class="nav-brand">MailSafe Academy</span>
+          <span class="nav-score">+<span id="p1-nav-score">0</span> pts</span>
+          <button class="nav-action" type="button" onclick="finishPhase1()">Concluir →</button>
+        </nav>
+
+        <div class="results-content">
+          <div class="results-heading">
+            <h2>Resultado da Fase 1</h2>
+            <p>Análise da sua caixa de entrada concluída</p>
+          </div>
+
+          <div class="results-grid">
+            <div class="result-card highlight">
+              <span class="result-card-tag">Seu Desempenho</span>
+              <div class="result-score">
+                <div class="big" id="p1-score-value">0</div>
+                <span class="lbl">pontos na fase</span>
+              </div>
+              <ul class="result-checks" id="p1-score-checks"></ul>
+            </div>
+
+            <div class="result-card">
+              <span class="result-card-tag">Os 3 E-mails de Phishing eram</span>
+              <div id="p1-phishing-list"></div>
+              <button class="result-action" type="button" onclick="finishPhase1()">Concluir Fase 1 →</button>
+            </div>
+          </div>
+
+          <div class="results-footer">
+            <div class="results-toggle">
+              <span>Mostrar detalhes</span>
+              <label class="switch">
+                <input type="checkbox" id="p1-details-toggle" checked onchange="toggleDetails(this)" />
+                <span class="slider"></span>
+              </label>
+            </div>
+            <div class="pager" role="presentation">
+              <span class="pager-dot active"></span>
+              <span class="pager-dot"></span>
+              <span class="pager-dot"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="phase1-client" class="email-client">
+
+      <!-- 1. TOPBAR -->
+      <header class="mail-topbar">
+        <div class="mail-topbar-left">
+          <button class="icon-btn" type="button" aria-label="Menu">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+          </button>
+          <div class="mail-logo">
+            <span class="mail-logo-icon">P</span>
+            <span class="mail-logo-text">player</span>
+          </div>
+        </div>
+
+        <div class="mail-search">
+          <span class="icon-btn" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+          </span>
+          <input type="text" placeholder="Search mail" aria-label="Pesquisar" />
+          <button class="icon-btn" type="button" aria-label="Filtros de pesquisa">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"/></svg>
+          </button>
+        </div>
+
+        <div class="mail-topbar-right">
+          <button class="icon-btn" type="button" aria-label="Ajuda">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z"/></svg>
+          </button>
+          <button class="icon-btn" type="button" aria-label="Configurações">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+          </button>
+          <button class="upgrade-btn" type="button">Upgrade</button>
+          <button class="icon-btn" type="button" aria-label="Aplicativos">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/></svg>
+          </button>
+          <span class="mail-avatar" aria-label="Perfil">P</span>
+        </div>
+      </header>
+
+      <!-- 2 + 3 + 4: CORPO -->
+      <div class="mail-shell">
+        <!-- Sidebar esquerda -->
+        <nav class="mail-sidebar" aria-label="Pastas">
+          <button class="compose-btn" type="button">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+            Compose
+          </button>
+          <ul class="folder-list">
+            <li class="folder active" title="Entrada">
+              <span class="folder-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 12h-4c0 1.66-1.35 3-3 3s-3-1.34-3-3H4.99V5H19v10z"/></svg></span>
+              Inbox
+              <span class="folder-count" id="p1-unread-count">6</span>
+            </li>
+            <li class="folder" title="Favoritos">
+              <span class="folder-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></span>
+              Starred
+            </li>
+            <li class="folder" title="Adiados">
+              <span class="folder-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M7.88 3.39L6.6 1.86 2 5.71l1.29 1.53 4.59-3.85zM22 5.72l-4.6-3.86-1.29 1.53 4.6 3.86L22 5.72zM12 4c-4.97 0-9 4.03-9 9s4.02 9 9 9c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 16c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7zm-3-9h3.63L9 15.7V17h6v-2h-3.63L15 10.3V9H9v2z"/></svg></span>
+              Snoozed
+            </li>
+            <li class="folder" title="Enviados">
+              <span class="folder-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></span>
+              Sent
+            </li>
+            <li class="folder" title="Rascunhos">
+              <span class="folder-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M21.99 8c0-.72-.37-1.35-.94-1.7L12 1 2.95 6.3C2.38 6.65 2 7.28 2 8v10c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2l-.01-10zM12 13L3.74 7.84 12 3l8.26 4.84L12 13z"/></svg></span>
+              Drafts
+              <span class="folder-count">2</span>
+            </li>
+            <li class="folder" title="Compras">
+              <span class="folder-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg></span>
+              Purchases
+              <span class="folder-count">1</span>
+            </li>
+            <li class="folder" title="Mais">
+              <span class="folder-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg></span>
+              More
+              <span class="folder-caret"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg></span>
+            </li>
+          </ul>
+          <div class="mail-labels">
+            <div class="labels-row">
+              <span>Labels</span>
+              <button class="labels-add" type="button" aria-label="Adicionar label">+</button>
+            </div>
+          </div>
+        </nav>
+
+        <!-- Área principal -->
+        <main class="mail-main">
+          <div class="mail-actionbar">
+            <button class="icon-btn" type="button" aria-label="Selecionar">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+            </button>
+            <button class="icon-btn" type="button" aria-label="Atualizar">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+            </button>
+            <button class="icon-btn" type="button" aria-label="Mais opções">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+            </button>
+            <span class="mail-range">1–6 of 6</span>
+            <button class="icon-btn" type="button" aria-label="Anterior">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+            </button>
+            <button class="icon-btn" type="button" aria-label="Próximo">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+            </button>
+            <button class="icon-btn" type="button" aria-label="Atalhos de teclado">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M20 5H4c-1.1 0-1.99.9-1.99 2L2 17c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-9 3h2v2h-2V8zm0 3h2v2h-2v-2zM8 8h2v2H8V8zm0 3h2v2H8v-2zm-1 2H5v-2h2v2zm0-3H5V8h2v2zm9 7H8v-2h8v2zm0-4h-2v-2h2v2zm0-3h-2V8h2v2zm3 3h-2v-2h2v2zm0-3h-2V8h2v2z"/></svg>
+            </button>
+          </div>
+
+          <div class="mail-tabs">
+            <button class="tab active" type="button">
+              <span class="tab-top">
+                <span class="tab-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 12h-4c0 1.66-1.35 3-3 3s-3-1.34-3-3H4.99V5H19v10z"/></svg></span>
+                <span class="tab-name">Primary</span>
+              </span>
+              <span class="tab-preview">Banco Vitta, NuPay…</span>
+            </button>
+            <button class="tab" type="button">
+              <span class="tab-top">
+                <span class="tab-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg></span>
+                <span class="tab-name">Promotions</span>
+                <span class="tab-badge green">5 new</span>
+              </span>
+              <span class="tab-preview">Novidades de lojas e serviços</span>
+            </button>
+            <button class="tab" type="button">
+              <span class="tab-top">
+                <span class="tab-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></span>
+                <span class="tab-name">Social</span>
+                <span class="tab-badge blue">3 new</span>
+              </span>
+              <span class="tab-preview">Redes sociais e convites</span>
+            </button>
+            <button class="tab" type="button">
+              <span class="tab-top">
+                <span class="tab-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg></span>
+                <span class="tab-name">Updates</span>
+                <span class="tab-badge orange">2 new</span>
+              </span>
+              <span class="tab-preview">Notificações e atualizações</span>
+            </button>
+          </div>
+
+          <div id="email-list-items" class="mail-list" aria-label="Lista de e-mails"></div>
+
+          <div class="mail-reading hidden" id="mail-reading" aria-label="Conteúdo do e-mail">
+            <button class="back-btn" type="button" onclick="backToInbox()">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+              Back to Inbox
+            </button>
+            <div class="mail-read-head">
+              <div class="subject-line" id="em-subject-big"></div>
+            </div>
+            <div class="mail-read-meta">
+              <span class="mail-read-avatar" id="em-avatar">M</span>
+              <div class="mail-read-from">
+                <span id="em-from"></span>
+                <span class="mail-read-date" id="em-date"></span>
+              </div>
+            </div>
+            <pre class="email-body-text" id="em-body"></pre>
+            <div class="email-actions">
+              <span class="action-label" id="em-action-label">Como você classifica este e-mail?</span>
+              <button class="btn btn-success" id="btn-safe" onclick="classifyEmail('safe')">Seguro</button>
+              <button class="btn btn-danger" id="btn-phish" onclick="classifyEmail('phishing')">Phishing</button>
+            </div>
+          </div>
+        </main>
+
+        <!-- Faixa lateral direita -->
+        <aside class="mail-apps-rail" aria-label="Aplicativos">
+          <button class="app-icon" style="--app-color:#1a73e8" type="button" title="Calendário">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11zM9 10H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm-8 4H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2z"/></svg>
+          </button>
+          <button class="app-icon" style="--app-color:#f9ab00" type="button" title="Anotações">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+          </button>
+          <button class="app-icon" style="--app-color:#188038" type="button" title="Tarefas">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M22 5.18L10.59 16.6l-4.24-4.24 1.41-1.41 2.83 2.83 10-10L22 5.18zM12 20c-4.41 0-8-3.59-8-8s3.59-8 8-8c1.57 0 3.04.46 4.28 1.25l1.45-1.45C16.1 2.67 14.13 2 12 2 6.48 2 2 6.48 2 12s4.48 10 10 10c1.73 0 3.36-.44 4.78-1.22l-1.43-1.43c-1.02.41-2.15.65-3.35.65z"/></svg>
+          </button>
+          <button class="app-icon" style="--app-color:#1a73e8" type="button" title="Contatos">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+          </button>
+          <button class="app-icon app-icon-add" type="button" title="Mais aplicativos">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+          </button>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FASE 2: DETETIVE DE LINKS ==================== -->
+  <section id="screen-phase2" class="screen" aria-label="Fase 2: Detetive de links">
+    <div id="phase2-platform" class="p2-platform">
+
+      <header class="p2-topbar">
+        <div class="p2-logo">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+          <span>Detetive <b>Links</b></span>
+        </div>
+        <nav class="p2-nav" aria-label="Menu">
+          <a class="active" href="javascript:void(0)">Início</a>
+          <a href="javascript:void(0)">Categorias</a>
+          <a href="javascript:void(0)">Sobre</a>
+          <a href="javascript:void(0)">Ranking</a>
+        </nav>
+        <div class="p2-user">
+          <button class="p2-bell" type="button" aria-label="Notificações">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+          </button>
+          <div class="p2-avatar" aria-label="Avatar">J</div>
+        </div>
+      </header>
+
+      <div class="p2-hero">
+        <div class="p2-watermark" aria-hidden="true">SEGURANÇA</div>
+        <div class="p2-hero-inner">
+          <h1>Seguro ou Phishing?</h1>
+          <p>Teste sua capacidade de identificar e-mails e mensagens fraudulentas<br>antes que seja tarde demais.</p>
+        </div>
+      </div>
+
+      <div class="p2-body">
+        <main class="p2-main">
+          <div id="phase2-links-container"></div>
+        </main>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FASE 3: LOGIN REAL OU FALSO ==================== -->
+  <section id="screen-phase3" class="screen" aria-label="Fase 3: Login real ou falso">
+    <div class="phase-watermark" aria-hidden="true">LOGIN</div>
+    <div class="phase-content">
+      <div class="phase-intro">
+        <div>
+          <h3>Qual delas é a página legítima?</h3>
+          <p>Hackers clonam páginas de login para roubar senhas. Observe a barra de endereço, o cadeado, a logo e os textos. Clique na que você acha que é a <strong style="color:var(--success);">página real</strong>.</p>
+        </div>
+      </div>
+      <div id="phase3-pairs-container"></div>
+    </div>
+  </section>
+
+  <!-- ==================== FASE 4: TOMADA DE DECISÃO ==================== -->
+  <section id="screen-phase4" class="screen" aria-label="Fase 4: Tomada de decisão">
+    <div class="phase-watermark" aria-hidden="true">DECISÃO</div>
+    <div class="phase-content">
+      <div class="phase-intro">
+        <div>
+          <h3>Você está sob ataque!</h3>
+          <p>Você receberá situações de ataque de phishing. Em cada etapa, escolha a ação mais segura. As escolhas têm consequências reais!</p>
+        </div>
+      </div>
+      <div id="phase4-scenario-container"></div>
+    </div>
+  </section>
+
+  <!-- ==================== FASE 5: QUIZ FINAL ==================== -->
+  <section id="screen-phase5" class="screen" aria-label="Fase 5: Quiz final">
+    <div class="phase-watermark" aria-hidden="true">QUIZ</div>
+    <div class="phase-content">
+      <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="p5-quiz-bar" style="width:0%"></div></div>
+      <div id="phase5-questions-container"></div>
+    </div>
+  </section>
+
+  <!-- ==================== RESULTADO DE FASE (FASES 2–5) ==================== -->
+  <section id="screen-phase-result" class="screen" aria-label="Resultado da fase">
+    <div class="results-screen">
+      <div class="results-watermark" aria-hidden="true">RESULTADOS</div>
+
+      <nav class="results-nav" aria-label="Navegação">
+        <button class="nav-close" type="button" onclick="backToPhase()" aria-label="Voltar">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+        <span class="nav-brand">MailSafe Academy</span>
+        <span class="nav-score">+<span id="pr-nav-score">0</span> pts</span>
+        <button class="nav-action" type="button" onclick="finishCurrentPhase()">Concluir →</button>
+      </nav>
+
+      <div class="results-content">
+        <div class="results-heading">
+          <h2 id="pr-title">Resultado da Fase</h2>
+          <p id="pr-subtitle"></p>
+        </div>
+
+        <div class="results-grid">
+          <div class="result-card highlight">
+            <span class="result-card-tag">Seu Desempenho</span>
+            <div class="result-score">
+              <div class="big" id="pr-score">0</div>
+              <span class="lbl">pontos na fase</span>
+            </div>
+            <ul class="result-checks" id="pr-checks"></ul>
+          </div>
+
+          <div class="result-card">
+            <span class="result-card-tag" id="pr-detail-tag"></span>
+            <h3 class="result-card-title" id="pr-detail-title"></h3>
+            <p class="result-card-sub" id="pr-detail-sub"></p>
+            <ul class="result-checks" id="pr-detail-list"></ul>
+            <button class="result-action" type="button" onclick="finishCurrentPhase()" id="pr-detail-finish">Concluir →</button>
+          </div>
+        </div>
+
+        <div class="results-footer">
+          <div class="results-toggle">
+            <span>Mostrar detalhes</span>
+            <label class="switch">
+              <input type="checkbox" id="pr-details-toggle" checked onchange="toggleDetails(this)" />
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== CERTIFICADO FINAL ==================== -->
+  <section id="screen-certificate" class="screen" aria-label="Certificado de conclusão">
+    <div class="certificate-wrapper">
+      <div class="certificate-watermark" aria-hidden="true">PARABÉNS</div>
+      <div class="certificate">
+        <div class="cert-academy">MailSafe Academy</div>
+        <h1 class="cert-title">Certificado de Conclusão</h1>
+        <p class="cert-subtitle">Treinamento em Identificação de Phishing e Segurança Digital</p>
+        <div class="cert-divider"></div>
+        <p class="cert-awarded-to">Este certificado é concedido a</p>
+        <p class="cert-name" id="cert-player-name">Jogador</p>
+        <p style="font-size:0.92rem;color:var(--text-muted);">por completar com sucesso todas as 5 fases do programa de treinamento,<br>demonstrando habilidade na detecção de ataques de phishing.</p>
+        <div class="cert-score-display">
+          <span class="big-score" id="cert-score">0</span>
+          <div class="score-meta">
+            <span class="label">Pontuação Total</span>
+            <span class="grade" id="cert-grade">—</span>
+          </div>
+        </div>
+        <div class="cert-divider"></div>
+        <p class="cert-date" id="cert-date"></p>
+        <p style="font-size:0.8rem;color:var(--text-dim);margin-top:4px;">MailSafe Academy · Educação em Segurança Digital</p>
+      </div>
+
+      <!-- Checklist Final -->
+      <div class="checklist-section mt-24">
+        <h3>Checklist: Como Identificar um Phishing</h3>
+        <div class="checklist-grid">
+          <div class="checklist-item"><div class="check-icon">✓</div><div class="check-text"><strong>Verifique o remetente</strong> O domínio do e-mail é idêntico ao oficial? Ex: @banco.com.br vs @banco-vitta.xyz</div></div>
+          <div class="checklist-item"><div class="check-icon">✓</div><div class="check-text"><strong>Desconfie da urgência</strong> "Sua conta será bloqueada em 1h!" é uma tática clássica de pressão psicológica.</div></div>
+          <div class="checklist-item"><div class="check-icon">✓</div><div class="check-text"><strong>Não clique — passe o mouse</strong> Veja a URL real antes de clicar. Links suspeitos revelam domínios estranhos.</div></div>
+          <div class="checklist-item"><div class="check-icon">✓</div><div class="check-text"><strong>Nunca forneça senha por e-mail</strong> Bancos e empresas legítimas JAMAIS pedem sua senha, token ou código por e-mail.</div></div>
+          <div class="checklist-item"><div class="check-icon">✓</div><div class="check-text"><strong>Verifique o HTTPS e a URL</strong> Cadeado não basta. Verifique se o domínio é exatamente o correto após o https://.</div></div>
+          <div class="checklist-item"><div class="check-icon">✓</div><div class="check-text"><strong>Busque erros no texto</strong> Phishings têm frequentemente erros de português, formatação estranha ou logos alterados.</div></div>
+          <div class="checklist-item"><div class="check-icon">✓</div><div class="check-text"><strong>Use canais oficiais</strong> Dúvida? Acesse o site da empresa digitando o endereço você mesmo. Nunca pelo link do e-mail.</div></div>
+          <div class="checklist-item"><div class="check-icon">✓</div><div class="check-text"><strong>Reporte ao TI/segurança</strong> Sempre comunique e-mails suspeitos ao time de segurança da sua empresa ou organização.</div></div>
+        </div>
+      </div>
+
+      <div class="text-center mt-24" style="padding-bottom:40px;">
+        <button class="cert-restart" onclick="restartGame()">Jogar Novamente</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div id="phase1-confetti" aria-hidden="true"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
