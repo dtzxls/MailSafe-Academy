@@ -83,7 +83,7 @@ O jogo é dividido em **5 fases**, cada uma trabalhando uma habilidade diferente
 **Por que é útil:** essa é a situação mais comum do dia a dia. A fase treina o olhar para os detalhes que costumam passar despercebidos, como domínios de e-mail levemente alterados, tom de urgência exagerado e pedidos de dados sensíveis.
 
 <p align="center">
-  <img src="fotos do projeto/print 2.png" width="900">
+  <img src="fotos do projeto/print 2.PNG" width="900">
 </p>
 
 
@@ -96,7 +96,7 @@ O jogo é dividido em **5 fases**, cada uma trabalhando uma habilidade diferente
 **Por que é útil:** um dos truques mais usados em phishing é disfarçar um link malicioso atrás de um texto confiável. Essa fase ensina a nunca confiar apenas no texto do link, e sim checar para onde ele realmente aponta antes de clicar.
 
 <p align="center">
-  <img src="fotos do projeto/print 3.png" width="900">
+  <img src="fotos do projeto/print 3.PNG" width="900">
 </p>
 
 
@@ -109,7 +109,7 @@ O jogo é dividido em **5 fases**, cada uma trabalhando uma habilidade diferente
 **Por que é útil:** depois que a vítima clica no link de um e-mail de phishing, ela geralmente cai em uma página de login clonada. Essa fase treina o olhar crítico para identificar sites falsificados antes de digitar qualquer senha.
 
 <p align="center">
-  <img src="fotos do projeto/print 4.png" width="900">
+  <img src="fotos do projeto/print 4.PNG" width="900">
 </p>
 
 ---
@@ -121,7 +121,7 @@ O jogo é dividido em **5 fases**, cada uma trabalhando uma habilidade diferente
 **Por que é útil:** phishing não é só sobre reconhecer um e-mail falso, mas também sobre **como agir** diante da pressão. Essa fase simula a tomada de decisão em tempo real, reforçando qual é o comportamento mais seguro.
 
 <p align="center">
-  <img src="fotos do projeto/print 5.png" width="900">
+  <img src="fotos do projeto/print 5.PNG" width="900">
 </p>
 
 ---
@@ -133,10 +133,10 @@ O jogo é dividido em **5 fases**, cada uma trabalhando uma habilidade diferente
 **Por que é útil:** consolida todo o conteúdo aprendido nas fases anteriores de forma objetiva, e o certificado funciona como um incentivo simbólico de conclusão — reforçando a sensação de aprendizado completo.
 
 <p align="center">
-  <img src="fotos do projeto/print 6.png" width="900">
+  <img src="fotos do projeto/print 6.PNG" width="900">
 </p>
 <p align="center">
-  <img src="fotos do projeto/certificado.png" width="900">
+  <img src="fotos do projeto/certificado.PNG" width="900">
 </p>
 
 
