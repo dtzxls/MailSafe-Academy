@@ -70,7 +70,7 @@ Cada uma dessas etapas corresponde a uma das fases do jogo: a Fase 1 trabalha o 
 O jogo é dividido em **5 fases**, cada uma trabalhando uma habilidade diferente de reconhecimento de golpes digitais. A pontuação é acumulada ao longo das fases, e ao final o jogador recebe um certificado de conclusão.
 
 <p align="center">
-  <img src="fotos do projeto/print 1.png" width="900">
+  <img src="fotos do projeto/print 1.PNG" width="900">
 </p>
 
 
