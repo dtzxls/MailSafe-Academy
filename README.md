@@ -104,20 +104,6 @@ Mais do que um jogo, esse projeto busca simular, de forma segura e controlada, o
 - **CSS3** — estilização da interface, simulando um cliente de e-mail real
 - **JavaScript (Vanilla)** — lógica do jogo, pontuação, navegação entre fases e feedback
 
-Todo o projeto foi desenvolvido em um único arquivo, sem dependências externas, podendo ser executado diretamente no navegador, sem necessidade de servidor.
+Todo o projeto foi desenvolvido sem dependências externas, podendo ser executado diretamente no navegador, sem necessidade de servidor.
 
 ---
-
-## Como executar
-
-1. Faça o download ou clone este repositório
-2. Abra o arquivo `index.html` diretamente no navegador
-3. Nenhuma instalação ou configuração adicional é necessária
-
----
-
-## Autor(es)
-
-> *[Espaço para colocar seu nome e/ou dos integrantes do grupo]*
-
-Projeto desenvolvido para a **Maratona Tech — Dilemas Digitais**.
